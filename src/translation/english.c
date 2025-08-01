@@ -1648,6 +1648,15 @@ static translation_string all_strings[] = {
     {TR_PARAMETER_TERRAIN_WATER, "Water" },
     {TR_PARAMETER_TERRAIN_MEADOW, "Meadow" },
     {TR_PARAMETER_TERRAIN_SHRUB, "Shrub" },
+    {TR_ACTION_TYPE_CHANGE_MODEL_DATA, "Change model data"},
+    {TR_PARAMETER_MODEL, "Model"},
+    {TR_PARAMETER_DATA_TYPE, "Data type"},
+    {TR_PARAMETER_COST, "Cost"},
+    {TR_PARAMETER_DESIRABILITY_VALUE, "Desirability value"},
+    {TR_PARAMETER_DESIRABILITY_STEP, "Desirability step"},
+    {TR_PARAMETER_DESIRABILITY_STEP_SIZE, "Desirability step size"},
+    {TR_PARAMETER_DESIRABILITY_RANGE, "Desirability range"},
+    {TR_PARAMETER_LABORERS, "Laborers"},
 };
 
 void translation_english(const translation_string **strings, int *num_strings)

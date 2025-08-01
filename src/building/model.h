@@ -45,6 +45,15 @@ typedef struct {
     int tax_multiplier; /**< Tax rate multiplier */
 } model_house;
 
+enum {
+    MODEL_COST,
+    MODEL_DESIRABILITY_VALUE,
+    MODEL_DESIRABILITY_STEP,
+    MODEL_DESIRABILITY_STEP_SIZE,
+    MODEL_DESIRABILITY_RANGE,
+    MODEL_LABORERS,
+};
+
 /**
  * Loads the model from file
  * @return boolean true if model was loaded successfully, false otherwise

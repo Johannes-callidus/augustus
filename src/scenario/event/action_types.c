@@ -710,3 +710,7 @@ int scenario_action_type_change_terrain_execute(scenario_action_t *action)
 
     return 1;
 }
+
+int scenario_action_type_change_model_data_execute(scenario_action_t *action) {
+    return 1;
+}
