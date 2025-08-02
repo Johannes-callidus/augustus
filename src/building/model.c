@@ -341,12 +341,12 @@ static const model_building new_buildings[NUM_NEW_BUILDINGS] = {
     .desirability_step_size = 0, .desirability_range = 0, .laborers = 2 }, // Latrines
     { .cost = 50, .desirability_value = 0, .desirability_step = 0,
     .desirability_step_size = 0, .desirability_range = 0, .laborers = 0 }, // Native hut alt
-    { .cost = 0, .desirability_value = 6, .desirability_step = 1,
-    .desirability_step_size = -1, .desirability_range = 4, .laborers = 0 }, // Native decoration
-    { .cost = 0, .desirability_value = 15, .desirability_step = 2,
-    .desirability_step_size = -2, .desirability_range = 8, .laborers = 0 }, // Native Monument
     { .cost = 0, .desirability_value = -10, .desirability_step = 1,
     .desirability_step_size = 2, .desirability_range = 4, .laborers = 0 }, // Native Watchtower
+    { .cost = 0, .desirability_value = 15, .desirability_step = 2,
+    .desirability_step_size = -2, .desirability_range = 8, .laborers = 0 }, // Native Monument
+    { .cost = 0, .desirability_value = 6, .desirability_step = 1,
+    .desirability_step_size = -1, .desirability_range = 4, .laborers = 0 }, // Native Decoration
 };
 
 
