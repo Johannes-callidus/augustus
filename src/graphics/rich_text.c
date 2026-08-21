@@ -265,9 +265,9 @@ static int get_external_image_id(const char *filename)
     for (int i = 0; i < 2 && !found_path; i++) {
         snprintf(full_path, FILE_NAME_MAX, "%s/%s", paths[i], filename);
         if (game_campaign_has_file(full_path)) {
-            found_path = full_path;
-        } else {
-            found_path = dir_get_file_at_location(full_path, PATH_LOCATION_COMMUNITY);
+            found_path = full_path; // first look in campaigns directory
+        } else if (!(found_path = dir_get_file_at_location(full_path, PATH_LOCATION_EDITOR_CONTENT))) { // then in editor/content
+            found_path = dir_get_file_at_location(full_path, PATH_LOCATION_COMMUNITY); // at last in community
         }
     }
     if (!found_path) {

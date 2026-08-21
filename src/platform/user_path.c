@@ -41,6 +41,27 @@ void platform_user_path_create_subdirectories(void)
         const char *new_directory = platform_file_manager_get_directory_for_location(i, 0);
         if (*new_directory) {
             platform_file_manager_create_directory(new_directory, pref_user_dir(), 0);
+            if (i == PATH_LOCATION_EDITOR_CONTENT) {
+                // copy the community folder into editor/contents on creation
+                char *paths[] = {
+                    "audio",
+                    "image",
+                    "video",
+                    0
+                };
+                for (int i = 0; paths[i]; i++) {
+                    char source[FILE_NAME_MAX];
+                    char destination[FILE_NAME_MAX];
+                    snprintf(source, FILE_NAME_MAX, "%s/%s",
+                        platform_file_manager_get_directory_for_location(PATH_LOCATION_COMMUNITY, 0), paths[i]);
+                    snprintf(destination, FILE_NAME_MAX, "%s/%s",
+                        platform_file_manager_get_directory_for_location(PATH_LOCATION_EDITOR_CONTENT, 0), paths[i]);
+                    if (!source[0] || !destination[0]) {
+                        continue;
+                    }
+                    platform_file_manager_copy_directory(source, destination, 0);
+                }
+            }
         }
     }
 }
@@ -95,11 +116,13 @@ void platform_user_path_copy_files(const char *original_user_path, int overwrite
                 listing = dir_append_files_with_extension("bmp");
                 break;
             case PATH_LOCATION_COMMUNITY:
+            case PATH_LOCATION_EDITOR_CONTENT:
                 has_subdirectories = 1;
                 break;
             case PATH_LOCATION_EDITOR_CUSTOM_EMPIRES:
             case PATH_LOCATION_EDITOR_CUSTOM_MESSAGES:
             case PATH_LOCATION_EDITOR_CUSTOM_EVENTS:
+            case PATH_LOCATION_EDITOR_MODEL_DATA:
                 listing = dir_find_files_with_extension(original_directory, "xml");
                 break;
             default:

@@ -11,6 +11,7 @@
 
 static const char *AUDIO_FILE_PATHS[] = {
     CAMPAIGNS_DIRECTORY "/audio",
+    "editor/content/audio",
     "community/audio",
     "mp3",
     "wavs",
@@ -19,6 +20,7 @@ static const char *AUDIO_FILE_PATHS[] = {
 
 static const char *VIDEO_FILE_PATHS[] = {
     CAMPAIGNS_DIRECTORY "/video",
+    "editor/content/video",
     "community/video",
     "smk",
     "mpg",

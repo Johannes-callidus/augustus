@@ -141,7 +141,7 @@ static file_type_data empire_data = { "xml", PATH_LOCATION_EDITOR_CUSTOM_EMPIRES
 static file_type_data scenario_event_data = { "xml", PATH_LOCATION_EDITOR_CUSTOM_EVENTS };
 static file_type_data custom_messages_data = { "xml", PATH_LOCATION_EDITOR_CUSTOM_MESSAGES };
 static file_type_data model_data = { "xml", PATH_LOCATION_EDITOR_MODEL_DATA };
-static file_type_data image_data = { "png", PATH_LOCATION_COMMUNITY_IMAGE };
+static file_type_data image_data = { "png", PATH_LOCATION_CONTENT_IMAGE };
 
 static int compare_name(const void *va, const void *vb)
 {
@@ -467,12 +467,12 @@ static void draw_foreground(void)
             }
         } else if (*data.selected_file && (data.type == FILE_TYPE_EMPIRE_IMAGE || data.type == FILE_TYPE_EMPIRE)) {
             const image *img = image_get(data.preview_image_id);
-            
+
             // Calculate scale to fit image within 266x352 box
             float x_scale = img->width / 266.0f;
             float y_scale = img->height / 352.0f;
             float scale = x_scale > y_scale ? x_scale : y_scale;  // Use SMALLER ratio to fit
-            
+
             if (scale <= 1.0f) {
                 // Image is smaller than box, just center it without scaling
                 int centered_x = 352 + (266 - img->width) / 2;
@@ -805,7 +805,7 @@ static void update_preview_image(void)
         empire_xml_parse_file(filename, 1);
         const char *custom_filename = empire_xml_read_info();
         if (custom_filename && *custom_filename) {
-            const char *got_filename = dir_get_file_at_location(custom_filename, PATH_LOCATION_COMMUNITY_IMAGE);
+            const char *got_filename = dir_get_file_at_location(custom_filename, PATH_LOCATION_CONTENT_IMAGE);
             if (got_filename && *got_filename) {
                 string_copy(string_from_ascii(got_filename), (uint8_t *)filename, 128);
             } else {
