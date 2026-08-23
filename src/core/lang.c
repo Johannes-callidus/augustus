@@ -654,6 +654,10 @@ const uint8_t *lang_get_string(int group, int index)
                 return translation_for(TR_EDITOR_TOOL_OUTSKIRTS);
             case TR_EDITOR_TOOL_OUTSKIRTS_REMOVE:
                 return translation_for(TR_EDITOR_TOOL_OUTSKIRTS_REMOVE);
+            case TR_EDITOR_TOOL_WATER:
+                return translation_for(TR_EDITOR_TOOL_WATER);
+            case TR_EDITOR_TOOL_SHALLOW:
+                return translation_for(TR_EDITOR_TOOL_SHALLOW);
             default:
                 break;
         }
@@ -685,6 +689,10 @@ const uint8_t *lang_get_string(int group, int index)
                 return translation_for(TR_EDITOR_SELECT_OFFSET);
             case TOOL_NATIVE_FIELD: // fix og spelling mistake "native feild"
                 return lang_get_string(41, BUILDING_NATIVE_CROPS);
+            case TOOL_WATER:
+                return translation_for(TR_EDITOR_TOOL_WATER);
+            case TOOL_SHALLOW:
+                return translation_for(TR_EDITOR_TOOL_SHALLOW);
             default:
                 break;
         }

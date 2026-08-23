@@ -105,6 +105,8 @@ static const uint8_t *get_text_for_warning(warning_type type)
             return translation_for(TR_WARNING_OPEN_WATER_NEEDED_FOR_BUILDING);
         case WARNING_NO_MILITARY_ON_OUTSKIRTS:
             return translation_for(TR_WARNING_NO_MILITARY_ON_OUTSKIRTS);
+        case WARNING_ENEMIES_PREVENT_BRIDGE_DESTRUCTION:
+            return translation_for(TR_WARNING_ENEMIES_PREVENT_BRIDGE_DESTRUCTION);
         default:
             return lang_get_string(19, type - 2);
     }
