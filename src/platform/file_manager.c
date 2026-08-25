@@ -580,11 +580,11 @@ const char *platform_file_manager_get_directory_for_location(int location, const
         case PATH_LOCATION_EDITOR_MODEL_DATA:
             cursor = snprintf(full_path, FILE_NAME_MAX, "%s%s%s", user_directory, slash, paths.editor_model_data);
             break;
-        case PATH_LOCATION_CONTENT_IMAGE:
-            cursor = snprintf(full_path, FILE_NAME_MAX, "%s%s%s", user_directory, slash, paths.content_image);
-            break;
         case PATH_LOCATION_EDITOR_CONTENT:
             cursor = snprintf(full_path, FILE_NAME_MAX, "%s%s%s", user_directory, slash, paths.editor_content);
+            break;
+        case PATH_LOCATION_CONTENT_IMAGE:
+            cursor = snprintf(full_path, FILE_NAME_MAX, "%s%s%s", user_directory, slash, paths.content_image);
             break;
     }
 
