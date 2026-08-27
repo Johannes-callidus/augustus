@@ -140,8 +140,7 @@ void platform_user_path_copy_files(const char *original_user_path, int overwrite
                 listing = dir_append_files_with_extension("svx");
                 break;
             case PATH_LOCATION_SCENARIO:
-                listing = dir_find_files_with_extension(original_directory, "map");
-                listing = dir_append_files_with_extension("mapx");
+                has_subdirectories = 1;
                 break;
             case PATH_LOCATION_CAMPAIGN:
                 listing = dir_find_files_with_extension(original_directory, "campaign");
