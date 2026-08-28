@@ -258,8 +258,7 @@ static void init(file_type type, file_dialog_type dialog_type)
 
     if (data.dialog_type != FILE_DIALOG_SAVE) {
         if (type == FILE_TYPE_SCENARIO) {
-            data.file_list = dir_find_files_with_extension_at_location(scenario_data.location, scenario_data.extension);
-            data.file_list = dir_append_files_with_extension(scenario_data_expanded.extension);
+            data.file_list = dir_find_all_subdirectories_at_location(scenario_data.location);
         } else if (type == FILE_TYPE_EMPIRE) {
             data.file_list = dir_find_files_with_extension_at_location(empire_data.location, empire_data.extension);
         } else if (type == FILE_TYPE_SCENARIO_EVENTS) {
@@ -339,11 +338,29 @@ static void draw_mission_info(int x_offset, int y_offset, int box_size)
     text_draw_ellipsized(text, x_offset, y_offset, box_size, FONT_NORMAL_BLACK, 0);
 }
 
+static const char *find_map_file(char *foldername)
+{
+    const char *filename;
+    char map_foldername[FILE_NAME_MAX];
+    snprintf(map_foldername, FILE_NAME_MAX, "%s/%s",
+        platform_file_manager_get_directory_for_location(scenario_data.location, 0), foldername);
+    filename = dir_get_first_file_with_extension(map_foldername, scenario_data.extension);
+    if (!filename || !*filename) {
+        filename = dir_get_first_file_with_extension(map_foldername, scenario_data_expanded.extension);
+    }
+    return filename;
+}
+
 static void draw_background(void)
 {
     window_draw_underlying_window();
     if (*data.selected_file) {
-        const char *filename = dir_get_file_at_location(data.selected_file, data.file_data->location);
+        const char *filename;
+        if (data.type == FILE_TYPE_SCENARIO) {
+            filename = find_map_file(data.selected_file);
+        } else {
+            filename = dir_get_file_at_location(data.selected_file, data.file_data->location);
+        }
         if (filename && data.type != FILE_TYPE_EMPIRE_IMAGE) {
             if (data.type == FILE_TYPE_SAVED_GAME) {
                 data.savegame_info_status = game_file_io_read_saved_game_info(filename, 0, &data.info);

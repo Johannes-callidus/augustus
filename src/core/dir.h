@@ -112,4 +112,20 @@ const char *dir_get_file_at_location(const char *filepath, int location);
  */
 const char *dir_append_location(const char *filename, int location);
 
+/**
+ * Gets the first file in a directory with a specific extension (should be used when there should only be one file in the dir)
+ * @param dir The directory to search on, or null if base directory
+ * @param extension Extension of the file to find
+ * @return The filename of the found file, or NULL if none was found
+ */
+const char *dir_get_first_file_with_extension(const char *dir, const char *extension);
+
+/**
+ * Gets the first file at the requested location ID with a specific extension (should be used when there should only be one file in the dir)
+ * @param location The location ID where the file should reside
+ * @param extension Extension of the file to find
+ * @return The filename of the found file, or NULL if none was found
+ */
+const char *dir_get_first_file_with_extension_at_location(int location, const char *extension);
+
 #endif // CORE_DIR_H

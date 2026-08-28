@@ -15,6 +15,7 @@ static struct {
     int max_files;
     char *cased_filename;
     char current_dir[FILE_NAME_MAX];
+    char first_filename[FILE_NAME_MAX];
 } data;
 
 static void allocate_listing_files(int min, int max)
@@ -243,4 +244,26 @@ const char *dir_append_location(const char *filename, int location)
     snprintf(corrected_filename, FILE_NAME_MAX, "%s%s",
         platform_file_manager_get_directory_for_location(location, 0), filename);
     return corrected_filename;
+}
+
+static int return_first_hit(const char *filename, long modified_time)
+{
+    string_copy((const uint8_t *)filename, (uint8_t *)data.first_filename, FILE_NAME_MAX);
+    return 1;
+}
+
+const char *dir_get_first_file_with_extension(const char *dir, const char *extension)
+{
+    memset(data.first_filename, 0, FILE_NAME_MAX); // zero the filename to avoid any errors
+    platform_file_manager_list_directory_contents(dir, TYPE_FILE, extension, return_first_hit);
+    if (!data.first_filename[0]) {
+        return 0; // return 0 if there's no filename found to not return only the path
+    } else {
+        return get_case_corrected_file(dir, data.first_filename);
+    }
+}
+
+const char *dir_get_first_file_with_extension_at_location(int location, const char *extension)
+{
+    return dir_get_first_file_with_extension(platform_file_manager_get_directory_for_location(location, 0), extension);
 }
