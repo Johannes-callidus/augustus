@@ -691,7 +691,11 @@ static void button_ok_cancel(int is_ok, int param2)
     if (data.dialog_type == FILE_DIALOG_SAVE) {
         filename = dir_append_location(data.selected_file, data.file_data->location);
     } else {
-        filename = dir_get_file_at_location(data.selected_file, data.file_data->location);
+        if (data.type == FILE_TYPE_SCENARIO) {
+            filename = find_map_file(data.selected_file);
+        } else {
+            filename = dir_get_file_at_location(data.selected_file, data.file_data->location);
+        }
         if (!filename) {
             window_plain_message_dialog_show(TR_SAVE_DIALOG_FILE_DOES_NOT_EXIST_TITLE,
                 TR_SAVE_DIALOG_FILE_DOES_NOT_EXIST_TEXT, 1);
