@@ -242,14 +242,16 @@ static void init(file_type type, file_dialog_type dialog_type)
             file_remove_extension(data.selected_file);
         }
         encoding_from_utf8(data.selected_file, data.typed_name, FILE_NAME_MAX);
-        if (data.dialog_type == FILE_DIALOG_SAVE) {
+        if (data.dialog_type == FILE_DIALOG_SAVE && data.type != FILE_TYPE_SCENARIO) {
             file_append_extension(data.selected_file, data.file_data->extension, FILE_NAME_MAX);
         }
     } else if (dialog_type == FILE_DIALOG_SAVE) {
         // Suggest default filename
         string_copy(lang_get_string(9, type == FILE_TYPE_SCENARIO ? 7 : 6), data.typed_name, FILE_NAME_MAX);
         encoding_to_utf8(data.typed_name, data.selected_file, FILE_NAME_MAX, encoding_system_uses_decomposed());
-        file_append_extension(data.selected_file, data.file_data->extension, FILE_NAME_MAX);
+        if (data.type != FILE_TYPE_SCENARIO) {
+            file_append_extension(data.selected_file, data.file_data->extension, FILE_NAME_MAX);
+        }
     } else {
         // Use empty string
         data.typed_name[0] = 0;
@@ -274,7 +276,11 @@ static void init(file_type type, file_dialog_type dialog_type)
             data.file_list = dir_append_files_with_extension(saved_game_data_expanded.extension);
         }
     } else {
-        data.file_list = dir_find_files_with_extension_at_location(data.file_data->location, data.file_data->extension);
+        if (type == FILE_TYPE_SCENARIO) {
+            data.file_list = dir_find_all_subdirectories_at_location(scenario_data.location);
+        } else {
+            data.file_list = dir_find_files_with_extension_at_location(data.file_data->location, data.file_data->extension);
+        }
     }
     init_filtered_file_list();
     list_box_init(&list_box, data.filtered_file_list.num_files);
@@ -598,7 +604,9 @@ static void input_box_changed(int is_addition_at_end)
         if (data.file_list->num_files > NUM_FILES_IN_VIEW) {
             scroll_index = find_first_file_with_prefix(data.selected_file);
         }
-        file_append_extension(data.selected_file, data.file_data->extension, FILE_NAME_MAX);
+        if (data.type != FILE_TYPE_SCENARIO) {
+            file_append_extension(data.selected_file, data.file_data->extension, FILE_NAME_MAX);
+        }
         if (scroll_index >= 0 && data.filtered_file_list.num_files > scroll_index &&
             platform_file_manager_compare_filename(data.selected_file,
                 data.filtered_file_list.files[scroll_index].name) == 0) {
@@ -626,7 +634,18 @@ static void confirm_save_file(int accepted, int checked)
     if (!accepted) {
         return;
     }
-    const char *filename = dir_append_location(data.selected_file, data.file_data->location);
+    const char *filename;
+    if (data.type != FILE_TYPE_SCENARIO) {
+        filename = dir_append_location(data.selected_file, data.file_data->location);
+    } else {
+        char map_name[FILE_NAME_MAX];
+        string_copy((const uint8_t *)data.selected_file, (uint8_t *)map_name, FILE_NAME_MAX);
+        file_append_extension(map_name, scenario_data_expanded.extension, FILE_NAME_MAX);
+        filename = dir_append_location(data.selected_file, data.file_data->location);
+        platform_file_manager_create_directory(filename, 0, 1); // create new directory for map
+        // append the actual filename
+        snprintf((char *)filename, FILE_NAME_MAX, "%s/%s", filename, map_name);
+    }
     input_box_stop(&main_input);
     if (checked) {
         config_set(CONFIG_UI_ASK_CONFIRMATION_ON_FILE_OVERWRITE, 0);
@@ -689,7 +708,16 @@ static void button_ok_cancel(int is_ok, int param2)
     const char *filename;
 
     if (data.dialog_type == FILE_DIALOG_SAVE) {
-        filename = dir_append_location(data.selected_file, data.file_data->location);
+        if (data.type == FILE_TYPE_SCENARIO) {
+            char map_name[FILE_NAME_MAX];
+            string_copy((const uint8_t *)data.selected_file, (uint8_t *)map_name, FILE_NAME_MAX);
+            file_append_extension(map_name, scenario_data_expanded.extension, FILE_NAME_MAX);
+            filename = dir_append_location(data.selected_file, data.file_data->location);
+            // append the actual filename
+            snprintf((char *)filename, FILE_NAME_MAX, "%s/%s", filename, map_name);
+        } else {
+            filename = dir_append_location(data.selected_file, data.file_data->location);
+        }
     } else {
         if (data.type == FILE_TYPE_SCENARIO) {
             filename = find_map_file(data.selected_file);
@@ -856,7 +884,9 @@ static void select_file(unsigned int index, int is_double_click)
         encoding_from_utf8(data.selected_file, data.typed_name, FILE_NAME_MAX);
         if (data.dialog_type == FILE_DIALOG_SAVE) {
             input_box_refresh_text(&main_input);
-            file_append_extension(data.selected_file, data.file_data->extension, FILE_NAME_MAX);
+            if (data.type != FILE_TYPE_SCENARIO) {
+                file_append_extension(data.selected_file, data.file_data->extension, FILE_NAME_MAX);
+            }
         }
         window_request_refresh();
     }
