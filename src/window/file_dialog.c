@@ -642,7 +642,7 @@ static void confirm_save_file(int accepted, int checked)
         string_copy((const uint8_t *)data.selected_file, (uint8_t *)map_name, FILE_NAME_MAX);
         file_append_extension(map_name, scenario_data_expanded.extension, FILE_NAME_MAX);
         filename = dir_append_location(data.selected_file, data.file_data->location);
-        platform_file_manager_create_directory(filename, 0, 1); // create new directory for map
+        platform_file_manager_create_directory(filename, 0, 0); // not overwriting allows for only maps being edited but assets staying intact
         // append the actual filename
         snprintf((char *)filename, FILE_NAME_MAX, "%s/%s", filename, map_name);
     }
