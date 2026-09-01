@@ -330,6 +330,8 @@ static int start_scenario(const uint8_t *scenario_name, const char *scenario_fil
         if (game_file_load_saved_game(scenario_file) == FILE_LOAD_SUCCESS) {
             is_save_game = 1;
             scenario_set_name(scenario_folder_name);
+            mission = scenario_campaign_mission();
+            rank = scenario_campaign_rank();
         } else {
             return 0;
         }
