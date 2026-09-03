@@ -128,4 +128,11 @@ const char *dir_get_first_file_with_extension(const char *dir, const char *exten
  */
 const char *dir_get_first_file_with_extension_at_location(int location, const char *extension);
 
+/**
+ * Gets the directory for the current scenario (where the map file and sometimes assets are in)
+ * @return The full path to the directory
+ * Do only use when a scenario or savegame is currently loaded for sure
+ */
+const char *dir_get_scenario_dir(void);
+
 #endif // CORE_DIR_H

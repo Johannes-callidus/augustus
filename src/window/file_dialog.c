@@ -711,6 +711,7 @@ static void button_ok_cancel(int is_ok, int param2)
         if (data.type == FILE_TYPE_SCENARIO) {
             char map_name[FILE_NAME_MAX];
             string_copy((const uint8_t *)data.selected_file, (uint8_t *)map_name, FILE_NAME_MAX);
+            scenario_set_name((uint8_t *)data.selected_file); // set the scenario name so the game can find scenario specific assets in editor too
             file_append_extension(map_name, scenario_data_expanded.extension, FILE_NAME_MAX);
             filename = dir_append_location(data.selected_file, data.file_data->location);
             // append the actual filename
@@ -720,6 +721,7 @@ static void button_ok_cancel(int is_ok, int param2)
         }
     } else {
         if (data.type == FILE_TYPE_SCENARIO) {
+            scenario_set_name((uint8_t *)data.selected_file); // set the scenario name so the game can find scenario specific assets in editor too
             filename = find_map_file(data.selected_file);
         } else {
             filename = dir_get_file_at_location(data.selected_file, data.file_data->location);

@@ -4,6 +4,7 @@
 #include "core/file.h"
 #include "core/string.h"
 #include "platform/file_manager.h"
+#include "scenario/property.h"
 
 #include <stdlib.h>
 #include <string.h>
@@ -266,4 +267,12 @@ const char *dir_get_first_file_with_extension(const char *dir, const char *exten
 const char *dir_get_first_file_with_extension_at_location(int location, const char *extension)
 {
     return dir_get_first_file_with_extension(platform_file_manager_get_directory_for_location(location, 0), extension);
+}
+
+const char *dir_get_scenario_dir(void)
+{
+    static char full_path[FILE_NAME_MAX];
+    snprintf(full_path, FILE_NAME_MAX, "%s%s",
+        platform_file_manager_get_directory_for_location(PATH_LOCATION_SCENARIO, 0), scenario_name());
+    return full_path;
 }
