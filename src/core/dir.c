@@ -269,6 +269,7 @@ const char *dir_get_first_file_with_extension_at_location(int location, const ch
     return dir_get_first_file_with_extension(platform_file_manager_get_directory_for_location(location, 0), extension);
 }
 
+#ifndef BUILDING_ASSET_PACKER
 const char *dir_get_scenario_dir(void)
 {
     static char full_path[FILE_NAME_MAX];
@@ -276,3 +277,4 @@ const char *dir_get_scenario_dir(void)
         platform_file_manager_get_directory_for_location(PATH_LOCATION_SCENARIO, 0), scenario_name());
     return full_path;
 }
+#endif
