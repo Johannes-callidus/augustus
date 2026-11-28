@@ -155,6 +155,13 @@ enum {
     POP_CLASS_SLUMS = 4
 };
 
+typedef enum {
+    DECISION_NOT_MADE = 0,
+    DECISION_OPTION_1 = 1,
+    DECISION_OPTION_2 = 2,
+    DECISION_OPTION_3 = 3
+} scenario_decision_evaluation;
+
 typedef struct {
     condition_types type;
     int parameter1;
@@ -208,5 +215,11 @@ typedef struct {
     unsigned int id; // this number should correspond to the index in array
     uint8_t text[MAX_SCENARIO_TEXT_LENGTH]; // the actual text which is used in the action/condition
 } scenario_text_t;
+
+typedef struct {
+    unsigned int id; // this number should correspond to the index in array
+    scenario_decision_evaluation decision; // the option the player chose, DECISION_NOT_MADE if not decided yet
+    int time_left; // timer to track time until decision is made by game
+} scenario_decision_t;
 
 #endif // SCENARIO_EVENT_DATA_H
