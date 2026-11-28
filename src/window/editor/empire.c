@@ -28,6 +28,8 @@
 #include "scenario/data.h"
 #include "scenario/editor.h"
 #include "scenario/empire.h"
+#include "widget/complex_button.h"
+#include "widget/grid_picker.h"
 #include "window/editor/edit_route_cost.h"
 #include "window/editor/empire_properties.h"
 #include "window/editor/map.h"
@@ -84,6 +86,9 @@ static void button_advanced_route_cost(const generic_button *button);
 static void button_empire_tools(int param1, int param2);
 static void button_hide_route(const generic_button *button);
 static void button_hide_edge(const generic_button *button);
+
+static void resource_picker_selected(grid_picker *picker);
+
 
 static arrow_button arrow_buttons_empire[] = {
     {8, 48, 17, 24, button_change_empire, 1},
@@ -146,6 +151,10 @@ static generic_button hide_edge_button[] = {
 
 static resource_button sell_buttons[RESOURCE_MAX] = { 0 };
 static resource_button buy_buttons[RESOURCE_MAX] = { 0 };
+
+static grid_picker resource_picker;
+static complex_button resource_picker_anchor;
+static grid_picker_cell resource_picker_cells[RESOURCE_MAX + 1];
 
 static struct {
     unsigned int selected_button;
@@ -231,6 +240,39 @@ static void update_screen_size(void)
     }
     update_hidden_generic_buttons();
     image_buttons_init();
+}
+
+static void setup_resource_picker(void)
+{
+    for (int r = RESOURCE_MIN; r < RESOURCE_MAX; r++) {
+        resource_data *r_data = resource_get_data(r);
+        const uint8_t *text = r_data->text;
+        int img_id = r_data->image.icon;
+        resource_picker_cells[r].image.id = img_id;
+        resource_picker_cells[r].image.auto_center = 1;
+        resource_picker_cells[r].tooltip_c.precomposed_text = text;
+        resource_picker_cells[r].tooltip_c.type = TOOLTIP_BUTTON;
+    }
+    resource_picker_cells[RESOURCE_MAX].image.id = assets_lookup_image_id(ASSET_UI_SELECTION_CROSS);
+    resource_picker_cells[RESOURCE_MAX].image.auto_center = 1;
+    resource_picker_cells[RESOURCE_MAX].tooltip_c.translation_key = TR_UI_TOOLTIP_CLEAR_SELECTION;
+    resource_picker_cells[RESOURCE_MAX].tooltip_c.type = TOOLTIP_BUTTON;
+    int column_count = 10;
+    int row_count = (RESOURCE_MAX + column_count) / column_count; // round up
+    int cell_side = 32; // square cells
+    int cell_spacing = 4; // space between cells
+
+    static tooltip_context tooltip_c = {
+        .type = TOOLTIP_BUTTON,
+        .translation_key = TR_UI_TOOLTIP_SELECT_RESOURCE_FILTER,
+    };
+
+    grid_picker_anchor_init(&resource_picker_anchor, 0, 0, 32, 32, NULL, 0, COMPLEX_BUTTON_STYLE_GRAY, &tooltip_c);
+    grid_picker_init(&resource_picker_anchor, &resource_picker, (const grid_picker_cell *) resource_picker_cells,
+         RESOURCE_MAX, column_count, row_count, cell_side, cell_side, cell_spacing, GRID_PICKER_STYLE_GRAY); // no cells yet
+    resource_picker.selected_callback = resource_picker_selected;
+    resource_picker.anchor.image.id = assets_lookup_image_id(ASSET_UI_RESOURCE_PICKER);
+    resource_picker.anchor.image.auto_center = 1;
 }
 
 static int map_viewport_width(void)
@@ -1363,6 +1405,15 @@ static void button_add_resource(int param1, int param2)
     }
     window_select_list_show_text((data.x_min + data.x_max) / 2 - 100, ((data.y_min + data.y_max) -
         (20 * total_resources + 24)) / 2, NULL, resource_texts, total_resources, add_resource);
+}
+
+static void resource_picker_selected(grid_picker *picker)
+{
+    if (!picker || !potential_resources) {
+        return;
+    }
+
+    
 }
 
 static void set_city_name(const uint8_t *name)
